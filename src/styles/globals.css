@@ -3,17 +3,26 @@
 @tailwind utilities;
 
 @layer base {
+
   body {
-    @apply bg-[#141414] text-white
+    @apply bg-[#141414] text-white overflow-x-hidden !scrollbar-thin !scrollbar-track-transparent !scrollbar-thumb-red-900 !scrollbar-thumb-rounded-md !scrollbar-track-rounded;
   }
 
   header {
-    @apply fixed top-0 z-50 flex w-full items-center justify-between px-4 py-4 transition-all lg:px-10 lg:py-6
+    @apply fixed top-0 z-50 flex w-full items-center justify-between px-4 py-4 transition-all lg:px-10 lg:py-6;
+  }
+
+  main {
+    @apply relative px-4 py-4 lg:px-10 lg:py-6 pb-24 lg:space-y-24;
   }
 }
 
 @layer components {
   .headerLink {
-    @apply cursor-pointer text-sm md:text-base font-light text-[#e5e5e5] transition duration-[0.4s] hover:text-[#b3b3b3];
+    @apply cursor-pointer text-sm md:text-base text-[#e5e5e5] transition duration-[0.4s] hover:text-[#b3b3b3];
+  }
+
+  .heroButton {
+    @apply flex items-center gap-2 rounded px-5 py-1.5 text-sm font-semibold transition hover:opacity-75 md:py-2.5 md:px-8 md:text-xl;
   }
 }

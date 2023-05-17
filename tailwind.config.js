@@ -9,7 +9,22 @@ module.exports = {
     "./src/**/*.{js,ts,jsx,tsx,mdx}",
   ],
   theme: {
-    extend: {},
+    extend: {
+      textShadow: {
+        md: "2px 2px 4px rgb(0 0 0 / 45%);",
+      },
+      backgroundImage: {
+        "gradient-to-b":
+          "linear-gradient(to bottom,rgba(20,20,20,0) 0,rgba(20,20,20,.15) 25%,rgba(20,20,20,.35) 39%,rgba(20,20,20,.58) 46%,#141414 60%,#141414 100%);",
+      },
+    },
   },
-  plugins: [],
+  plugins: [
+    require("tailwindcss-textshadow"),
+    require("tailwind-scrollbar-hide"),
+    require("tailwind-scrollbar")({ nocompatible: true }),
+  ],
+  variants: {
+    scrollbar: ["rounded"],
+  },
 };
