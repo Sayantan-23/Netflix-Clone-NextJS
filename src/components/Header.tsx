@@ -1,4 +1,5 @@
 import { MagnifyingGlassIcon, BellIcon } from "@heroicons/react/24/solid";
+import Image from "next/image";
 import Link from "next/link";
 import { useEffect, useState } from "react";
 
@@ -25,12 +26,14 @@ const Header = () => {
       className={`${
         isScrolled
           ? `bg-[#141414]`
-          : `bg-gradient-to-t from-[#141414]/0 to-[#141414]/80`
+          : `bg-gradient-to-t from-[#141414]/0 to-[#141414]/80 transition-all duration-500 ease-in-out`
       }`}
     >
       <div className="flex items-center space-x-2 md:space-x-10">
-        <img
-          src={"https://rb.gy/ulxxee"}
+        <Image
+          src={
+            "https://upload.wikimedia.org/wikipedia/commons/thumb/0/08/Netflix_2015_logo.svg/1200px-Netflix_2015_logo.svg.png"
+          }
           alt="Logo"
           width={100}
           height={100}

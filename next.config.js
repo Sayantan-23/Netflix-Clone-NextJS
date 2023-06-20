@@ -7,6 +7,18 @@ const nextConfig = {
         protocol: "https",
         hostname: "image.tmdb.org",
       },
+      {
+        protocol: "https",
+        hostname: "rb.gy",
+      },
+      {
+        protocol: "https",
+        hostname: "upload.wikimedia.org",
+      },
+      {
+        protocol: "https",
+        hostname: "images.unsplash.com",
+      },
     ],
   },
 };
