@@ -23,6 +23,18 @@ const login = () => {
         height={150}
         priority={true}
       />
+
+      <form className="relative mt-24 space-y-8 rounded bg-black/75 py-10 px-6 md:mt-0 md:max-w-md md:px-14">
+        <h1>Sign In</h1>
+        <div className="space-y-4">
+          <label htmlFor="">
+            <input type="email" name="" id="" placeholder="Email"/>
+          </label>
+          <label htmlFor="">
+          <input type="password" name="" id="" placeholder="Password"/>
+          </label>
+        </div>
+      </form>
     </div>
   );
 };
