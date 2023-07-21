@@ -5,6 +5,10 @@ import Header from "@/components/Header";
 import requests from "@/utils/requests";
 import { Movie } from "../../typings";
 import Row from "@/components/Row";
+import useAuth from "@/hooks/useAuth";
+import { useRecoilValue } from "recoil";
+import { modalState } from "@/atoms/modalAtom";
+import Modal from "@/components/Modal";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -29,27 +33,33 @@ export default function Home({
   topRated,
   trendingNow,
 }: Props) {
-  return (
-    <div className="relative h-screen bg-gradient-to-b lg:h-[150vh]">
-      <Head>
-        <title>ScreenWave</title>
-      </Head>
-      <Header />
-      <main className="">
-        <Banner netflixOriginals={netflixOriginals} />
-        <section className="md:space-y-24">
-          <Row title="Trending Now" movies={trendingNow} />
-          <Row title="Top Rated" movies={topRated} />
-          <Row title="Action Thrillers" movies={actionMovies} />
-          {/* My List */}
+  const { loading } = useAuth();
+  const showModal = useRecoilValue(modalState);
 
-          <Row title="Comedies" movies={comedyMovies} />
-          <Row title="Scary Movies" movies={horrorMovies} />
-          <Row title="Romance Movies" movies={romanceMovies} />
-          <Row title="Documentaries" movies={documentaries} />
-        </section>
-      </main>
-    </div>
+  if (loading) return null;
+
+  return (
+      <div className="relative h-screen bg-gradient-to-b lg:h-[150vh]">
+        <Head>
+          <title>ScreenWave</title>
+        </Head>
+        <Header />
+        <main className="">
+          <Banner netflixOriginals={netflixOriginals} />
+          <section className="md:space-y-24">
+            <Row title="Trending Now" movies={trendingNow} />
+            <Row title="Top Rated" movies={topRated} />
+            <Row title="Action Thrillers" movies={actionMovies} />
+            {/* My List */}
+
+            <Row title="Comedies" movies={comedyMovies} />
+            <Row title="Scary Movies" movies={horrorMovies} />
+            <Row title="Romance Movies" movies={romanceMovies} />
+            <Row title="Documentaries" movies={documentaries} />
+          </section>
+        </main>
+        {showModal && <Modal />}
+      </div>
   );
 }
 
