@@ -1,85 +1,59 @@
-import { Fragment, useRef, useState } from 'react'
-import { Dialog, Transition } from '@headlessui/react'
-import { ExclamationTriangleIcon } from '@heroicons/react/24/outline'
-import { useRecoilState } from 'recoil'
-import { modalState } from '@/atoms/modalAtom'
+import { modalState, movieState } from "@/atoms/modalAtom";
+import { XMarkIcon } from "@heroicons/react/24/solid";
+import MuiModal from "@mui/material/Modal";
+import { useEffect, useState } from "react";
+import { useRecoilState } from "recoil";
+import { Genre, Movie, Element } from "../../typings";
 
-export default function Example() {
-  const [showModal, setShowModal] = useRecoilState(modalState)
-
-  const cancelButtonRef = useRef(null)
+const Modal = () => {
+  const [showModal, setShowModal] = useRecoilState(modalState);
+  const [movie, setMovie] = useRecoilState(movieState);
+  const [trailer, setTrailer] = useState("");
+  const [genres, setGenres] = useState<Genre[]>([]);
 
   const handleClose = () => {
-    setShowModal(false)
-  }
+    setShowModal(false);
+  };
+
+  useEffect(() => {
+    if (!movie) return;
+
+    async function fetchMovie() {
+      const data = await fetch(
+        `https://api.themoviedb.org/3/${
+          movie?.media_type === "tv" ? "tv" : "movie"
+        }/${movie?.id}?api_key=${
+          process.env.NEXT_PUBLIC_API_KEY
+        }&language=en-US&append_to_response=videos`
+      ).then((response) => response.json());
+      if (data?.videos) {
+        const index = data.videos.results.findIndex(
+          (element: Element) => element.type === "Trailer"
+        );
+        setTrailer(data.videos?.results[index]?.key);
+      }
+      if (data?.genres) {
+        setGenres(data.genres);
+      }
+    }
+
+    fetchMovie();
+  }, [movie]);
 
   return (
-    <Transition.Root show={showModal} as={Fragment}>
-      <Dialog as="div" className="relative z-10" initialFocus={cancelButtonRef} onClose={handleClose}>
-        <Transition.Child
-          as={Fragment}
-          enter="ease-out duration-300"
-          enterFrom="opacity-0"
-          enterTo="opacity-100"
-          leave="ease-in duration-200"
-          leaveFrom="opacity-100"
-          leaveTo="opacity-0"
+    <MuiModal open={showModal} onClose={handleClose}>
+      <>
+        <button
+          onClick={handleClose}
+          className="modalButton absolute right-5 top-5 !z-40 h-9 w-9 border-none bg-[#181818] hover:bg-[#181818]"
         >
-          <div className="fixed inset-0 bg-gray-500 bg-opacity-75 transition-opacity" />
-        </Transition.Child>
+          <XMarkIcon className="h-6 w-6" />
+        </button>
 
-        <div className="fixed inset-0 z-10 overflow-y-auto">
-          <div className="flex min-h-full items-end justify-center p-4 text-center sm:items-center sm:p-0">
-            <Transition.Child
-              as={Fragment}
-              enter="ease-out duration-300"
-              enterFrom="opacity-0 translate-y-4 sm:translate-y-0 sm:scale-95"
-              enterTo="opacity-100 translate-y-0 sm:scale-100"
-              leave="ease-in duration-200"
-              leaveFrom="opacity-100 translate-y-0 sm:scale-100"
-              leaveTo="opacity-0 translate-y-4 sm:translate-y-0 sm:scale-95"
-            >
-              <Dialog.Panel className="relative transform overflow-hidden rounded-lg bg-white text-left shadow-xl transition-all sm:my-8 sm:w-full sm:max-w-lg">
-                <div className="bg-white px-4 pb-4 pt-5 sm:p-6 sm:pb-4">
-                  <div className="sm:flex sm:items-start">
-                    <div className="mx-auto flex h-12 w-12 flex-shrink-0 items-center justify-center rounded-full bg-red-100 sm:mx-0 sm:h-10 sm:w-10">
-                      <ExclamationTriangleIcon className="h-6 w-6 text-red-600" aria-hidden="true" />
-                    </div>
-                    <div className="mt-3 text-center sm:ml-4 sm:mt-0 sm:text-left">
-                      <Dialog.Title as="h3" className="text-base font-semibold leading-6 text-gray-900">
-                        Deactivate account
-                      </Dialog.Title>
-                      <div className="mt-2">
-                        <p className="text-sm text-gray-500">
-                          Are you sure you want to deactivate your account? All of your data will be permanently
-                          removed. This action cannot be undone.
-                        </p>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-                <div className="bg-gray-50 px-4 py-3 sm:flex sm:flex-row-reverse sm:px-6">
-                  <button
-                    type="button"
-                    className="inline-flex w-full justify-center rounded-md bg-red-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-red-500 sm:ml-3 sm:w-auto"
-                    onClick={() => setShowModal(false)}
-                  >
-                    Deactivate
-                  </button>
-                  <button
-                    type="button"
-                    className="mt-3 inline-flex w-full justify-center rounded-md bg-white px-3 py-2 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50 sm:mt-0 sm:w-auto"
-                    onClick={() => setShowModal(false)}
-                    ref={cancelButtonRef}
-                  >
-                    Cancel
-                  </button>
-                </div>
-              </Dialog.Panel>
-            </Transition.Child>
-          </div>
-        </div>
-      </Dialog>
-    </Transition.Root>
-  )
-}
+        <div></div>
+      </>
+    </MuiModal>
+  );
+};
+
+export default Modal;
